@@ -11,4 +11,12 @@ class Faculty extends Model
     const ACTIVE = 1;
     const NOTACTIVE = 0;
     public $timestamps = false;
+
+    /**
+     * Get the papers for the faculty.
+     */
+    public function papers()
+    {
+        return $this->hasMany(Paper::class);
+    }
 }

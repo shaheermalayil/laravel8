@@ -21,6 +21,7 @@ Route::group([
     'middleware' => 'api',
 ], function () {
     Route::get('faculties', 'FacultyController@index');
+    Route::get('papers', 'PaperController@index');
 
 });
 

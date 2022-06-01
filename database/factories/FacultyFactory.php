@@ -16,7 +16,8 @@ class FacultyFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'email' => $this->faker->unique()->safeEmail(),
-            'status'=> $this->faker->numberBetween(0, 1)
+            'status'=> $this->faker->numberBetween(0, 1),
+            'user_id'=> $this->faker->numberBetween(100, 200)
         ];
     }
 }

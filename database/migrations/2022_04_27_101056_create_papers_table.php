@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Faculty extends Migration
+class CreatePapersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class Faculty extends Migration
      */
     public function up()
     {
-        Schema::create('faculties', function (Blueprint $table) {
-        $table->id();
-        $table->string('name');
-        $table->string('email')->unique();
-        $table->boolean('status');
-        $table->bigInteger('user_id');
+        Schema::create('papers', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
+            $table->foreignId('faculty_id')->constrained();
+
         });
     }
 
@@ -29,6 +29,6 @@ class Faculty extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('faculties');
+        Schema::dropIfExists('papers');
     }
 }

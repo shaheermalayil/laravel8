@@ -16,7 +16,7 @@ class FacultyControllerTest extends TestCase
     public function test_example()
     {
         $response = $this->get('/api/faculties');
-        $response->dump();
+        // $response->dump();
         $response->assertStatus(200);
     }
 }
