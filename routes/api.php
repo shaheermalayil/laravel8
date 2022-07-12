@@ -21,6 +21,8 @@ Route::group([
     'middleware' => 'api',
 ], function () {
     Route::get('faculties', 'FacultyController@index');
+    Route::post('faculty', 'FacultyController@store');
+    Route::put('faculty/{id}', 'FacultyController@update');
     Route::get('papers', 'PaperController@index');
 
 });
