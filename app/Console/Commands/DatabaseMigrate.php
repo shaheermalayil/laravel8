@@ -66,23 +66,10 @@ class DatabaseMigrate extends BaseCommand
             // }   
             $this->call('migrate');
 
-        // }
+        }
         // $this->info('Completed migration');
 
         
     }
-    protected function prepareDatabase()
-    {
-        $re = $this->migrator->getRepository();
-        Log::info($re);
-        if (! $this->migrator->repositoryExists()) {
-            $this->call('migrate:install', array_filter([
-                '--database' => $this->option('database'),
-            ]));
-        }
-
-        if (! $this->migrator->hasRunAnyMigrations() && ! $this->option('pretend')) {
-            $this->loadSchemaState();
-        }
-    }
+  
 }
