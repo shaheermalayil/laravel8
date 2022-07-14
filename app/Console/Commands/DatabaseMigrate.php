@@ -66,7 +66,7 @@ class DatabaseMigrate extends BaseCommand
             // }   
             $this->call('migrate');
 
-        // }
+        }
         // $this->info('Completed migration');
 
         
