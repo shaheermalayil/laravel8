@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Paper;
+use App\Events\OrderCreated;
 class PaperController extends Controller
 {
     public function index()
@@ -12,5 +13,18 @@ class PaperController extends Controller
         ->when(request('faculty_id'),fn($builder) => $builder->whereFacultyId(request('faculty_id')))
         ->get();
         return response()->json(['data'=>$papers]);
+    }
+    public function createDbFunc($dbname)
+    {
+        // exec("/opt/lampp/bin/mysqldump -u root -p'root' embase_template > demo_dump");
+        exec("echo 'create database $dbname' | /opt/lampp/bin/mysql -u root -p'root'");
+        // exec("/opt/lampp/bin/mysql -u root -p'Frz@#111$01' $dbname < demo_dump");
+
+        return true;
+    }
+    public function soketi()
+    {
+        OrderCreated::dispatch('hi');
+        return response()->json(['message' =>'sent'], 200);
     }
 }

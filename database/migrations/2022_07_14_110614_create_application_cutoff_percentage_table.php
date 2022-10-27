@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Repositories\TableConfig;
 
-class CreateGroupPaperFacultyTable extends Migration
+class CreateApplicationCutoffPercentageTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,21 +13,18 @@ class CreateGroupPaperFacultyTable extends Migration
      */
     public function up()
     {
-        $db_data = TableConfig::getTableConfig();
-        foreach ($db_data as $db) {
-            $table = 'group_paper_faculty';
-            $table_name = $db->dbName . '.' . $table;
 
-            Schema::create($table_name, function (Blueprint $table) {
+            Schema::create('application_cutoff_percentage', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('group_id');
-                $table->integer('faculty_id');
-                $table->integer('status')->default(1);
+                $table->integer('course_id');
+                $table->integer('quota_id');
+                $table->integer('qualifying_exam_id');
+                $table->float('percentage');
+                $table->boolean('status')->default(1);
                 $table->integer('created_by');
                 $table->integer('updated_by')->nullable();
                 $table->timestamps();
             });
-        }
     }
 
     /**
@@ -38,6 +34,6 @@ class CreateGroupPaperFacultyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('group_paper_faculty');
+        Schema::dropIfExists('application_cutoff_percentage');
     }
 }

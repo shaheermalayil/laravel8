@@ -57,10 +57,83 @@ DROP TABLE IF EXISTS `migrations`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `migrations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) NOT NULL,
+  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_access_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_access_tokens_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_auth_codes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_auth_codes` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint(20) unsigned NOT NULL,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `scopes` text COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_auth_codes_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_clients` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `secret` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `provider` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `redirect` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `personal_access_client` tinyint(1) NOT NULL,
+  `password_client` tinyint(1) NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_clients_user_id_index` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_personal_access_clients`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_personal_access_clients` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `client_id` bigint(20) unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `oauth_refresh_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `oauth_refresh_tokens` (
+  `id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `access_token_id` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `revoked` tinyint(1) NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `oauth_refresh_tokens_access_token_id_index` (`access_token_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `papers`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -71,9 +144,7 @@ CREATE TABLE `papers` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   `faculty_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `papers_faculty_id_foreign` (`faculty_id`),
-  CONSTRAINT `papers_faculty_id_foreign` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `password_resets`;
@@ -103,6 +174,42 @@ CREATE TABLE `personal_access_tokens` (
   UNIQUE KEY `personal_access_tokens_token_unique` (`token`),
   KEY `personal_access_tokens_tokenable_type_tokenable_id_index` (`tokenable_type`,`tokenable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `syllabus`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `syllabus` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `course_id` int(11) NOT NULL,
+  `syllabus_code` varchar(255) NOT NULL,
+  `syllabus_name` varchar(255) NOT NULL,
+  `link` varchar(250) DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `syllabus_courses`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `syllabus_courses` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `course_code` varchar(75) NOT NULL,
+  `couurse_name` varchar(120) NOT NULL,
+  `term` int(11) NOT NULL,
+  `mode_id` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `syllabus_id` int(11) NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_by` int(11) NOT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `telescope_entries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -158,6 +265,20 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `websockets_statistics_entries`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `websockets_statistics_entries` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `app_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `peak_connection_count` int(11) NOT NULL,
+  `websocket_message_count` int(11) NOT NULL,
+  `api_message_count` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -165,37 +286,10 @@ CREATE TABLE `users` (
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
-INSERT INTO `migrations` VALUES (933,'2022_06_14_153400_add_has_exam_date_to_course_certificate_types',177);
-INSERT INTO `migrations` VALUES (934,'2022_06_14_154356_add_last_exam_date_to_course_certificate',178);
-INSERT INTO `migrations` VALUES (935,'2022_06_14_160028_create_admission_certificates_table',178);
-INSERT INTO `migrations` VALUES (936,'2022_06_14_172745_add_colomns_to_tc_application_table',178);
-INSERT INTO `migrations` VALUES (937,'2022_06_15_103014_insert_values_to_important_links_table',179);
-INSERT INTO `migrations` VALUES (938,'2022_06_16_122028_add_updated_by_colomn_to_online_payments_table',180);
-INSERT INTO `migrations` VALUES (939,'2022_06_20_075620_create_paper_group_table',181);
-INSERT INTO `migrations` VALUES (940,'2022_06_20_103607_create_group_paper_faculty_table',181);
-INSERT INTO `migrations` VALUES (941,'2022_06_20_215131_create_student_paper_group_table',181);
-INSERT INTO `migrations` VALUES (942,'2021_06_24_162715_add_rf_id_to_bibilios_table',181);
-INSERT INTO `migrations` VALUES (943,'2022_06_20_075117_add_main_account_id_coloumn_to_remittance_master_table',182);
-INSERT INTO `migrations` VALUES (944,'2022_06_20_103918_add_unique_user_id_user_type_users_table',182);
-INSERT INTO `migrations` VALUES (945,'2022_06_20_144352_create_student_log_table',181);
-INSERT INTO `migrations` VALUES (946,'2022_06_20_144734_add_data_cloumn_to_update_papers_log_table',183);
-INSERT INTO `migrations` VALUES (947,'2022_06_20_150013_add_from_date_to_course_certificate_table',183);
-INSERT INTO `migrations` VALUES (948,'2022_06_20_151107_create_asset_quotation_table',183);
-INSERT INTO `migrations` VALUES (949,'2022_06_24_175927_add_unique_guardian_id_student_id_appl_guardian',183);
-INSERT INTO `migrations` VALUES (950,'2022_06_27_164007_add_asset_request_id_to_asset_request_order_table',184);
-INSERT INTO `migrations` VALUES (951,'2022_06_25_110614_create_application_cutoff_percentage_table',185);
-INSERT INTO `migrations` VALUES (952,'2022_06_29_134555_add_day_order_id_to_timetable_timeslots',185);
-INSERT INTO `migrations` VALUES (953,'2022_06_30_101158_add_day_order_id_in_timetable_timeslots_table',185);
-INSERT INTO `migrations` VALUES (954,'2022_06_30_133704_create_certificate_course_table',185);
-INSERT INTO `migrations` VALUES (955,'2022_06_30_145143_create_programme_sector_table',185);
-INSERT INTO `migrations` VALUES (956,'2022_06_30_151736_add_programme_sector_id_to_courses_table',185);
-INSERT INTO `migrations` VALUES (957,'2022_06_30_190152_change_value_certificate_type_id_in_course_certificate_table',186);
-INSERT INTO `migrations` VALUES (958,'2022_07_01_111604_add_is_reference_to_appl_admission_table',187);
-INSERT INTO `migrations` VALUES (959,'2022_07_01_112254_add_is_disability_to_appl_student_table',188);
-INSERT INTO `migrations` VALUES (960,'2022_07_01_121131_add_is_default_to_application_master_table',188);
-INSERT INTO `migrations` VALUES (961,'2022_07_01_130837_add_values_application_master_table',188);
-INSERT INTO `migrations` VALUES (962,'2022_07_06_094226_update_is_skible_values_application_master_table',189);
-INSERT INTO `migrations` VALUES (963,'2022_07_07_130425_add_is_anti_dowry_to_appl_student_table',190);
-INSERT INTO `migrations` VALUES (964,'2022_07_07_131952_add_is_anti_dowry_application_master_table',190);
-INSERT INTO `migrations` VALUES (965,'2022_07_08_100225_drop_index_uid_number_from_student_table',191);
-INSERT INTO `migrations` VALUES (966,'2022_07_08_155558_add_reciept_path_to_appl_admission_table',192);
+INSERT INTO `migrations` VALUES (1,'2014_10_12_000000_create_users_table',1);
+INSERT INTO `migrations` VALUES (2,'0000_00_00_000000_create_websockets_statistics_entries_table',2);
+INSERT INTO `migrations` VALUES (3,'2016_06_01_000001_create_oauth_auth_codes_table',3);
+INSERT INTO `migrations` VALUES (4,'2016_06_01_000002_create_oauth_access_tokens_table',3);
+INSERT INTO `migrations` VALUES (5,'2016_06_01_000003_create_oauth_refresh_tokens_table',3);
+INSERT INTO `migrations` VALUES (6,'2016_06_01_000004_create_oauth_clients_table',3);
+INSERT INTO `migrations` VALUES (7,'2016_06_01_000005_create_oauth_personal_access_clients_table',3);

@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Repositories\TableConfig;
 
-class CreateStudentPaperGroupTable extends Migration
+class CreateProgrammeDegreesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,21 +13,16 @@ class CreateStudentPaperGroupTable extends Migration
      */
     public function up()
     {
-        $db_data = TableConfig::getTableConfig();
-        foreach ($db_data as $db) {
-            $table = 'student_paper_group';
-            $table_name = $db->dbName . '.' . $table;
 
-            Schema::create($table_name, function (Blueprint $table) {
+            Schema::create('programme_degrees', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->string('group_id');
-                $table->integer('student_id');
-                $table->integer('status')->default(1);
+                $table->integer('graduation_id');
+                $table->string('degree_name', 20);
+                $table->boolean('status')->default(1);
                 $table->integer('created_by');
                 $table->integer('updated_by')->nullable();
                 $table->timestamps();
             });
-        }
     }
 
     /**
@@ -38,6 +32,6 @@ class CreateStudentPaperGroupTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_paper_group');
+        Schema::dropIfExists('programme_degrees');
     }
 }

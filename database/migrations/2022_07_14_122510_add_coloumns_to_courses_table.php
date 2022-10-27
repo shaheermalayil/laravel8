@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use App\Repositories\TableConfig;
 
-class AddProgrammeSectorIdToCoursesTable extends Migration
+class AddColoumnsToCoursesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,16 +13,15 @@ class AddProgrammeSectorIdToCoursesTable extends Migration
      */
     public function up()
     {
-        $db_data = TableConfig::getTableConfig();
-        foreach ($db_data as $db) {
-            $table = 'courses';
-            $table_name = $db->dbName . '.' . $table;
 
-        Schema::table($table_name, function (Blueprint $table) {
-            $table->integer('programme_sector_id')->after('graduation_id')->nullable();
-        });
+            Schema::table('courses', function (Blueprint $table) {
+                $table->integer('degree_id')->nullable();
+                $table->string('stream', 50)->nullable();
+                $table->boolean('paper_display')->default(1);
+                $table->boolean('attendance_display')->default(1);
+                $table->boolean('assessment_display')->default(1);
+            });
     }
-}
 
     /**
      * Reverse the migrations.
