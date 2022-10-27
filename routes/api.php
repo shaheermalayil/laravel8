@@ -24,6 +24,8 @@ Route::group([
     Route::post('faculty', 'FacultyController@store');
     Route::put('faculty/{id}', 'FacultyController@update');
     Route::get('papers', 'PaperController@index');
+    Route::get('createDB/{name}', 'PaperController@createDbFunc');
+    Route::get('soketi', 'PaperController@soketi');
 
 });
 
