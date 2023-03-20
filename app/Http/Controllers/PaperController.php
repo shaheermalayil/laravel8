@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Paper;
 use App\Events\OrderCreated;
+use App\Events\NewMessage;
 class PaperController extends Controller
 {
     public function index()
@@ -22,9 +23,16 @@ class PaperController extends Controller
 
         return true;
     }
-    public function soketi()
+    public function soketi(Request $request)
     {
-        OrderCreated::dispatch('hi');
+        $message = $request->message;
+        OrderCreated::dispatch($message);
+        return response()->json(['message' =>'sent'], 200);
+    }
+    public function SendMessage(Request $request)
+    {
+        $message = $request->message;
+        broadcast(new NewMessage($message))->toOthers();
         return response()->json(['message' =>'sent'], 200);
     }
 }

@@ -10,10 +10,11 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class OrderCreated implements ShouldBroadcast
+class NewMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
     public $message;
+
     /**
      * Create a new event instance.
      *
@@ -31,6 +32,6 @@ class OrderCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('orders');
+        return new PresenceChannel('chatroom.1');
     }
 }

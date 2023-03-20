@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::middleware('auth:sanctum')->post('send', 'PaperController@SendMessage');
 Route::group([
     'middleware' => 'api',
 ], function () {
@@ -25,7 +26,10 @@ Route::group([
     Route::put('faculty/{id}', 'FacultyController@update');
     Route::get('papers', 'PaperController@index');
     Route::get('createDB/{name}', 'PaperController@createDbFunc');
-    Route::get('soketi', 'PaperController@soketi');
+    Route::post('soketi', 'PaperController@soketi');
+    Route::post('login', 'FacultyController@Authenticate');
+    Route::post('register', 'FacultyController@Register');
 
 });
+// Broadcast::routes(['middleware' => ['auth:sanctum']]);
 

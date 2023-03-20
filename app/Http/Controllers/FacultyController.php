@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 use App\Models\Faculty;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use DB;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 class FacultyController extends Controller
 {
     public function index()
@@ -11,12 +16,12 @@ class FacultyController extends Controller
       $faculties    = Faculty::query()
       ->where('status',Faculty::ACTIVE)
       ->when(request('user_id'),fn($builder)=> $builder->where('user_id',request('user_id') ) )
-      ->with('paperss')
+      ->with('papers')
       ->get();
 
       // activity()->log('Look mum, I logged something');
       $activity = Activity::all()->last();
-      return response()->json([/*'data'=>$faculties,*/'log'=>$activity->subject]);
+      return response()->json(['data'=>$faculties]);//log'=>$activity->subject]);
     }
     /**
         * @OA\Post(
@@ -84,5 +89,42 @@ class FacultyController extends Controller
       //   'user_id' =>1001,
       // ]);
       return response()->json(['data'=>$flight,$request->userAgent()]);
+    }
+
+    public function Authenticate(Request $request)
+    {
+      $credentials = $request->validate([
+        'email' => ['required'],
+        'password' => ['required'],
+        ]);
+      if (Auth::attempt($credentials)) {
+        $token = $request->user()->createToken('token');
+        return response()->json([
+          'user'=>$request->user(),
+          'token'=>$request->user()->createToken('token')->plainTextToken], 200);
+      }
+      return response()->json('denied', 401);
+
+    }
+    public function Register(Request $request)
+    {
+      $name = $request->input('name');
+      $email = $request->input('email');
+      $pass = $request->input('password');
+      // return response()->json(Carbon::now()->toDayDateTimeString(), 200);
+
+      // User::create([
+      //   'name' =>$name,
+      //   'email' =>$email,
+      //   'password' =>Hash::make($pass),
+      //   'created_at' => Carbon::now()
+      //   ]);
+      $id = DB::table('users')->insertGetId([
+         'name' =>$name,
+        'email' =>$email,
+        'password' =>Hash::make($pass),
+        'created_at' => Carbon::now()
+      ]);
+      return response()->json(Carbon::now(), 200);
     }
 }
