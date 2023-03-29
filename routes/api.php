@@ -26,7 +26,7 @@ Route::group([
     Route::put('faculty/{id}', 'FacultyController@update');
     Route::get('papers', 'PaperController@index');
     Route::get('createDB/{name}', 'PaperController@createDbFunc');
-    Route::post('soketi', 'PaperController@soketi');
+    Route::get('soketi', 'PaperController@soketi');
     Route::post('login', 'FacultyController@Authenticate');
     Route::post('register', 'FacultyController@Register');
 

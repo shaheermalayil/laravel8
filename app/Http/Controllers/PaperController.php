@@ -23,9 +23,9 @@ class PaperController extends Controller
 
         return true;
     }
-    public function soketi(Request $request)
+    public function soketi()
     {
-        $message = $request->message;
+        $message = 'Hello world...';
         OrderCreated::dispatch($message);
         return response()->json(['message' =>'sent'], 200);
     }
