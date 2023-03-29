@@ -1,11 +1,11 @@
 {
     "debug": true,
-    "port": 6001,
+    "port": 6002,
     "appManager.array.apps": [
         {
-            "id": "kpsdfgsdf",
-            "key": "dfasdfasdf",
-            "secret": "ertbdfbjggdgfe"
+            "id": "app-id",
+            "key": "app-key",
+            "secret": "app-secret"
         }
     ]
 }
