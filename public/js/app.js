@@ -2094,7 +2094,7 @@ console.log('hi');
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
 var laravelEcho = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: 'pusher',
-  key: 'app-key',
+  key: '123123123123123',
   wsHost: '127.0.0.1',
   wsPort: 6001,
   wssPort: 6001,
