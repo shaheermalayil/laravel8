@@ -5,7 +5,8 @@
         {
             "id": "app-id",
             "key": "app-key",
-            "secret": "app-secret"
+            "secret": "app-secret",
+            "enableClientMessages": true
         }
     ]
 }
