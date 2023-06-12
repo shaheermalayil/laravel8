@@ -50,7 +50,7 @@ return [
                 'port' => env('PUSHER_PORT', 6001),
                 'scheme' => env('PUSHER_SCHEME', 'http'),
                 'encrypted' => true,
-                'useTLS' => true,
+                'useTLS' => env('PUSHER_SCHEME') === 'https',
             ],
         ],
 

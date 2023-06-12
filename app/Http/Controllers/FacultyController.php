@@ -9,6 +9,7 @@ use DB;
 use Spatie\Activitylog\Models\Activity;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use QrCode;
 class FacultyController extends Controller
 {
     public function index()
@@ -126,5 +127,33 @@ class FacultyController extends Controller
         'created_at' => Carbon::now()
       ]);
       return response()->json(Carbon::now(), 200);
+    }
+    public function generateQr()
+    {
+      $from = [205, 0, 0];
+      $to = [0, 0, 205];
+      $result=  QrCode::size(400)
+        ->backgroundColor(255, 255, 255)
+        // ->style('dot')
+        ->eye('circle')
+        ->color(255, 255, 255)
+        ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+        ->margin(2)
+        ->format('png')->merge('https://w7.pngwing.com/pngs/249/19/png-transparent-google-logo-g-suite-google-guava-google-plus-company-text-logo.png',.3, true)
+        ->errorCorrection('H')
+        ->generate('Hello, World!hello');
+      $base= base64_encode($result);
+      return $base;
+      // return QrCode::size(200)
+      //   ->backgroundColor(255, 255, 255)
+      //   ->style('dot')
+      //   ->eye('circle')
+      //   ->color(255, 255, 255)
+      //   ->gradient($from[0], $from[1], $from[2], $to[0], $to[1], $to[2], 'diagonal')
+      //   ->margin(2)
+      //   //https://w7.pngwing.com/pngs/989/129/png-transparent-google-logo-google-search-meng-meng-company-text-logo-thumbnail.png
+      //   ->generate(
+      //       'Hello, World!hello asdfsdfasdfasdfasfasd',
+      //   );
     }
 }
