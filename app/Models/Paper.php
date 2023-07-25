@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Paper extends Model
 {
     use HasFactory;
-
+    fillable ['name']
     /**
      * Get faculty of the paper
      */
